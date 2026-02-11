@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Chrome } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Chrome, Shield } from "lucide-react";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,10 +36,18 @@ const Login = () => {
             </div>
 
             {/* Social Login */}
-            <Button variant="outline" className="w-full mb-6 gap-2">
-              <Chrome className="h-5 w-5" />
-              Continue with Google
-            </Button>
+            <div className="space-y-3 mb-6">
+              <Button variant="outline" className="w-full gap-2">
+                <Chrome className="h-5 w-5" />
+                Continue with Google
+              </Button>
+              <Link to="/aadhaar-auth">
+                <Button variant="outline" className="w-full gap-2 border-accent/30 hover:bg-accent/5">
+                  <Shield className="h-5 w-5 text-accent" />
+                  Login with Aadhaar
+                </Button>
+              </Link>
+            </div>
 
             <div className="relative mb-6">
               <div className="absolute inset-0 flex items-center">

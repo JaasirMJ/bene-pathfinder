@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Building2 } from "lucide-react";
@@ -95,10 +96,12 @@ export const SchemeCard = ({ scheme, onClick, showScore = true }: SchemeCardProp
       )}
 
       {/* Action */}
-      <Button variant="accent-outline" className="w-full group">
-        View Details
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-      </Button>
+      <Link to={`/scheme/${scheme.id}`}>
+        <Button variant="accent-outline" className="w-full group">
+          View Details
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Button>
+      </Link>
     </div>
   );
 };
