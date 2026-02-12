@@ -250,17 +250,22 @@ export const schemeCategories = [
   'Skills',
   'Healthcare',
   'Housing',
+  'Employment',
+  'Women & Child',
+  'Food Security',
 ];
 
 // States for filtering
 export const indianStates = [
   'All States',
-  'Maharashtra',
-  'Karnataka',
-  'Tamil Nadu',
-  'Gujarat',
-  'Rajasthan',
-  'Uttar Pradesh',
+  'Andhra Pradesh',
   'Delhi',
+  'Gujarat',
+  'Karnataka',
+  'Kerala',
+  'Maharashtra',
+  'Rajasthan',
+  'Tamil Nadu',
+  'Uttar Pradesh',
   'West Bengal',
 ];

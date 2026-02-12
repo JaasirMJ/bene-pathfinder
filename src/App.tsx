@@ -18,6 +18,11 @@ import DocumentsUpload from "./pages/DocumentsUpload";
 import AIAnalyzer from "./pages/AIAnalyzer";
 import Applications from "./pages/Applications";
 import ProfileCompletion from "./pages/ProfileCompletion";
+import About from "./pages/About";
+import HowItWorks from "./pages/HowItWorks";
+import AdminDashboard from "./pages/AdminDashboard";
+import NGODashboard from "./pages/NGODashboard";
+import OfficerDashboard from "./pages/OfficerDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +49,11 @@ const App = () => (
           <Route path="/ai-analyzer" element={<AIAnalyzer />} />
           <Route path="/applications" element={<Applications />} />
           <Route path="/profile" element={<ProfileCompletion />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/ngo" element={<NGODashboard />} />
+          <Route path="/officer" element={<OfficerDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
