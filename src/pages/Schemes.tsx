@@ -13,22 +13,28 @@ import {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SchemeCard } from "@/components/SchemeCard";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
+import { useLanguage } from "@/i18n/LanguageContext";
 import {
   Search,
   Filter,
   SlidersHorizontal,
   X,
   ArrowUpDown,
+  Clock,
 } from "lucide-react";
 import { mockSchemes, schemeCategories, indianStates } from "@/data/mockData";
 
 const Schemes = () => {
+  const { t } = useLanguage();
+  const { recentIds } = useRecentlyViewed();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedState, setSelectedState] = useState("All States");
   const [selectedType, setSelectedType] = useState<"all" | "central" | "state">("all");
   const [sortBy, setSortBy] = useState<"score" | "name">("score");
   const [showFilters, setShowFilters] = useState(false);
+  const [eligibilityFilter, setEligibilityFilter] = useState<"all" | "eligible" | "not-eligible">("all");
 
   const filteredSchemes = mockSchemes
     .filter((scheme) => {
@@ -40,6 +46,13 @@ const Schemes = () => {
       const matchesState = selectedState === "All States" || !scheme.state || scheme.state === selectedState;
       const matchesType = selectedType === "all" || scheme.type === selectedType;
 
+      // Eligibility filter
+      if (eligibilityFilter !== "all" && scheme.ruleMatches) {
+        const allMatch = Object.values(scheme.ruleMatches).every(Boolean);
+        if (eligibilityFilter === "eligible" && !allMatch) return false;
+        if (eligibilityFilter === "not-eligible" && allMatch) return false;
+      }
+
       return matchesSearch && matchesCategory && matchesState && matchesType;
     })
     .sort((a, b) => {
@@ -49,10 +62,13 @@ const Schemes = () => {
       return a.title.localeCompare(b.title);
     });
 
+  const recentSchemes = mockSchemes.filter((s) => recentIds.includes(s.id));
+
   const activeFiltersCount = [
     selectedCategory !== "All",
     selectedState !== "All States",
     selectedType !== "all",
+    eligibilityFilter !== "all",
   ].filter(Boolean).length;
 
   const clearFilters = () => {
@@ -60,6 +76,7 @@ const Schemes = () => {
     setSelectedState("All States");
     setSelectedType("all");
     setSearchQuery("");
+    setEligibilityFilter("all");
   };
 
   return (
@@ -70,12 +87,34 @@ const Schemes = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            Browse Government Schemes
+            {t("schemes.title")}
           </h1>
           <p className="text-muted-foreground">
-            Explore 500+ central and state government welfare schemes
+            {t("schemes.subtitle")}
           </p>
         </div>
+
+        {/* Recently Viewed */}
+        {recentSchemes.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+              <Clock className="h-5 w-5 text-accent" />
+              {t("recentlyViewed.title")}
+            </h2>
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {recentSchemes.map((scheme) => (
+                <Link
+                  key={scheme.id}
+                  to={`/scheme/${scheme.id}`}
+                  className="shrink-0 card-elevated p-3 w-[220px] hover:shadow-lg transition-shadow"
+                >
+                  <p className="text-sm font-medium text-foreground line-clamp-1">{scheme.title}</p>
+                  <p className="text-xs text-muted-foreground">{scheme.category}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Search and Filters Bar */}
         <div className="card-elevated p-4 mb-6">
@@ -84,7 +123,7 @@ const Schemes = () => {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
-                placeholder="Search schemes by name, category, or description..."
+                placeholder={t("schemes.search")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -147,6 +186,37 @@ const Schemes = () => {
                   <SelectItem value="name">By Name</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          {/* Eligibility Filters */}
+          <div className="mt-4 flex items-center gap-2">
+            <span className="text-sm text-muted-foreground font-medium">Eligibility:</span>
+            <div className="flex items-center rounded-lg border border-border p-1">
+              <Button
+                variant={eligibilityFilter === "all" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setEligibilityFilter("all")}
+                className="h-7 text-xs"
+              >
+                {t("schemes.showAll")}
+              </Button>
+              <Button
+                variant={eligibilityFilter === "eligible" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setEligibilityFilter("eligible")}
+                className="h-7 text-xs"
+              >
+                {t("schemes.showEligible")}
+              </Button>
+              <Button
+                variant={eligibilityFilter === "not-eligible" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setEligibilityFilter("not-eligible")}
+                className="h-7 text-xs"
+              >
+                {t("schemes.showNotEligible")}
+              </Button>
             </div>
           </div>
 
@@ -220,6 +290,12 @@ const Schemes = () => {
             {selectedType !== "all" && (
               <Badge variant="secondary" className="gap-1 cursor-pointer" onClick={() => setSelectedType("all")}>
                 {selectedType} schemes
+                <X className="h-3 w-3" />
+              </Badge>
+            )}
+            {eligibilityFilter !== "all" && (
+              <Badge variant="secondary" className="gap-1 cursor-pointer" onClick={() => setEligibilityFilter("all")}>
+                {eligibilityFilter === "eligible" ? "Eligible Only" : "Not Eligible"}
                 <X className="h-3 w-3" />
               </Badge>
             )}

@@ -26,9 +26,12 @@ import {
   Search,
   ChevronDown,
   MapPin,
+  Bookmark,
+  HelpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { mockNotifications } from "@/data/mockData";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 interface NavbarProps {
   isLoggedIn?: boolean;
@@ -116,6 +119,7 @@ export const Navbar = ({ isLoggedIn = false, userRole = 'citizen', userName = 'U
 
           {/* Right side actions */}
           <div className="flex items-center gap-2">
+            <LanguageSwitcher />
             {isLoggedIn ? (
               <>
                 {/* Notifications */}

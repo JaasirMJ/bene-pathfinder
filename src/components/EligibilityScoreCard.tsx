@@ -1,5 +1,6 @@
-import { Check, X, Minus } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 interface EligibilityScoreCardProps {
   score: number;
@@ -14,40 +15,15 @@ interface EligibilityScoreCardProps {
 }
 
 export const EligibilityScoreCard = ({ score, ruleMatches, compact = false }: EligibilityScoreCardProps) => {
-  const percentage = Math.round(score * 100);
-  const scoreLevel = percentage >= 80 ? 'high' : percentage >= 50 ? 'medium' : 'low';
-  
-  const getScoreColor = () => {
-    switch (scoreLevel) {
-      case 'high': return 'text-success';
-      case 'medium': return 'text-warning';
-      case 'low': return 'text-destructive';
-    }
-  };
-
-  const getScoreBg = () => {
-    switch (scoreLevel) {
-      case 'high': return 'bg-success';
-      case 'medium': return 'bg-warning';
-      case 'low': return 'bg-destructive';
-    }
-  };
-
-  const getScoreRingBg = () => {
-    switch (scoreLevel) {
-      case 'high': return 'stroke-success';
-      case 'medium': return 'stroke-warning';
-      case 'low': return 'stroke-destructive';
-    }
-  };
+  const { t } = useLanguage();
+  const allMatch = ruleMatches ? Object.values(ruleMatches).every(Boolean) : false;
 
   if (compact) {
     return (
       <div className="flex items-center gap-2">
-        <div className={cn("text-lg font-bold", getScoreColor())}>
-          {percentage}%
+        <div className={cn("text-lg font-bold", allMatch ? "text-success" : "text-destructive")}>
+          {allMatch ? t("eligibility.eligible") : t("eligibility.notEligible")}
         </div>
-        <div className="text-xs text-muted-foreground">match</div>
       </div>
     );
   }
@@ -55,34 +31,16 @@ export const EligibilityScoreCard = ({ score, ruleMatches, compact = false }: El
   return (
     <div className="card-elevated p-6">
       <div className="flex items-start gap-6">
-        {/* Circular Progress */}
-        <div className="relative">
-          <svg className="w-24 h-24 transform -rotate-90">
-            <circle
-              cx="48"
-              cy="48"
-              r="40"
-              stroke="currentColor"
-              strokeWidth="8"
-              fill="none"
-              className="text-muted"
-            />
-            <circle
-              cx="48"
-              cy="48"
-              r="40"
-              strokeWidth="8"
-              fill="none"
-              strokeLinecap="round"
-              strokeDasharray={`${percentage * 2.51} 251`}
-              className={getScoreRingBg()}
-            />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className={cn("text-2xl font-bold", getScoreColor())}>
-              {percentage}%
-            </span>
-          </div>
+        {/* Binary Result */}
+        <div className={cn(
+          "w-24 h-24 rounded-full flex items-center justify-center border-4",
+          allMatch
+            ? "border-success bg-success/10"
+            : "border-destructive bg-destructive/10"
+        )}>
+          <span className={cn("text-xl font-bold", allMatch ? "text-success" : "text-destructive")}>
+            {allMatch ? "YES" : "NO"}
+          </span>
         </div>
 
         {/* Rule Matches */}
@@ -114,13 +72,19 @@ export const EligibilityScoreCard = ({ score, ruleMatches, compact = false }: El
       {/* Score Label */}
       <div className="mt-4 pt-4 border-t border-border">
         <div className="flex items-center gap-2">
-          <div className={cn("h-2 w-2 rounded-full", getScoreBg())} />
+          <div className={cn(
+            "h-2 w-2 rounded-full",
+            allMatch ? "bg-success" : "bg-destructive"
+          )} />
           <span className="text-sm font-medium">
-            {scoreLevel === 'high' && 'Highly Eligible'}
-            {scoreLevel === 'medium' && 'Partially Eligible'}
-            {scoreLevel === 'low' && 'Low Eligibility'}
+            {allMatch ? t("eligibility.eligible") : t("eligibility.notEligible")}
           </span>
         </div>
+        {!allMatch && ruleMatches && (
+          <p className="text-xs text-muted-foreground mt-2">
+            Missing: {Object.entries(ruleMatches).filter(([, v]) => !v).map(([k]) => k).join(", ")}
+          </p>
+        )}
       </div>
     </div>
   );

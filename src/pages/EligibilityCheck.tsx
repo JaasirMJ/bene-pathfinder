@@ -6,7 +6,9 @@ import { Progress } from "@/components/ui/progress";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { EligibilityScoreCard } from "@/components/EligibilityScoreCard";
+import { EligibilityBinaryResult } from "@/components/EligibilityTags";
 import { SchemeCard } from "@/components/SchemeCard";
+import { useLanguage } from "@/i18n/LanguageContext";
 import {
   Brain,
   Sparkles,
@@ -18,23 +20,27 @@ import {
 import { mockSchemes } from "@/data/mockData";
 
 const EligibilityCheck = () => {
+  const { t } = useLanguage();
   const [stage, setStage] = useState<"loading" | "complete">("loading");
   const [progress, setProgress] = useState(0);
   const [currentTask, setCurrentTask] = useState("");
   const navigate = useNavigate();
 
   const loadingTasks = [
-    "Analyzing your profile...",
-    "Matching eligibility rules...",
-    "Running AI scoring engine...",
-    "Calculating match probabilities...",
-    "Ranking schemes by relevance...",
-    "Preparing recommendations...",
+    t("eligibility.analyzing"),
+    t("eligibility.matching"),
+    "Checking age criteria...",
+    "Verifying income limits...",
+    "Validating location eligibility...",
+    "Preparing results...",
   ];
 
   const eligibleSchemes = mockSchemes
-    .filter((s) => s.aiScore && s.aiScore > 0.4)
+    .filter((s) => s.ruleMatches && Object.values(s.ruleMatches).every(Boolean))
     .sort((a, b) => (b.aiScore || 0) - (a.aiScore || 0));
+
+  const notEligibleSchemes = mockSchemes
+    .filter((s) => s.ruleMatches && !Object.values(s.ruleMatches).every(Boolean));
 
   useEffect(() => {
     let taskIndex = 0;
@@ -81,11 +87,11 @@ const EligibilityCheck = () => {
             </div>
 
             <h1 className="text-3xl font-bold text-foreground mb-4">
-              AI Eligibility Engine Running
+              {t("eligibility.analyzing")}
             </h1>
             
             <p className="text-lg text-muted-foreground mb-8">
-              Our AI is analyzing your profile against 500+ government schemes
+              {t("eligibility.matching")}
             </p>
 
             {/* Progress */}
@@ -104,7 +110,7 @@ const EligibilityCheck = () => {
 
             {/* Processing Steps */}
             <div className="mt-12 grid grid-cols-3 gap-4">
-              {["Rule Matching", "ML Scoring", "Ranking"].map((step, i) => (
+              {["Rule Matching", "Criteria Check", "Results"].map((step, i) => (
                 <div
                   key={step}
                   className={`p-4 rounded-lg border ${
@@ -147,23 +153,19 @@ const EligibilityCheck = () => {
             Eligibility Analysis Complete!
           </h1>
           <p className="text-lg text-muted-foreground">
-            We found <span className="font-semibold text-accent">{eligibleSchemes.length} schemes</span> you may be eligible for
+            We found <span className="font-semibold text-success">{eligibleSchemes.length} eligible</span> and <span className="font-semibold text-destructive">{notEligibleSchemes.length} not eligible</span> schemes
           </p>
         </div>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-3 gap-4 max-w-xl mx-auto mb-8">
-          <div className="card-elevated p-4 text-center">
-            <p className="text-3xl font-bold text-success">{eligibleSchemes.filter(s => (s.aiScore || 0) >= 0.8).length}</p>
-            <p className="text-sm text-muted-foreground">High Match</p>
+        <div className="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8">
+          <div className="card-elevated p-4 text-center border-2 border-success/30">
+            <p className="text-3xl font-bold text-success">{eligibleSchemes.length}</p>
+            <p className="text-sm text-muted-foreground">{t("eligibility.eligible")}</p>
           </div>
-          <div className="card-elevated p-4 text-center">
-            <p className="text-3xl font-bold text-warning">{eligibleSchemes.filter(s => (s.aiScore || 0) >= 0.5 && (s.aiScore || 0) < 0.8).length}</p>
-            <p className="text-sm text-muted-foreground">Partial Match</p>
-          </div>
-          <div className="card-elevated p-4 text-center">
-            <p className="text-3xl font-bold text-destructive">{eligibleSchemes.filter(s => (s.aiScore || 0) < 0.5).length}</p>
-            <p className="text-sm text-muted-foreground">Low Match</p>
+          <div className="card-elevated p-4 text-center border-2 border-destructive/30">
+            <p className="text-3xl font-bold text-destructive">{notEligibleSchemes.length}</p>
+            <p className="text-sm text-muted-foreground">{t("eligibility.notEligible")}</p>
           </div>
         </div>
 
@@ -171,7 +173,7 @@ const EligibilityCheck = () => {
         {eligibleSchemes[0] && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Badge variant="score-high">Top Match</Badge>
+              <Badge className="bg-success/10 text-success border-success/30">Top Match</Badge>
               Best Recommendation for You
             </h2>
             <div className="card-elevated p-6">
@@ -198,10 +200,11 @@ const EligibilityCheck = () => {
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </div>
-                <EligibilityScoreCard
-                  score={eligibleSchemes[0].aiScore || 0}
-                  ruleMatches={eligibleSchemes[0].ruleMatches}
-                />
+                <div>
+                  {eligibleSchemes[0].ruleMatches && (
+                    <EligibilityBinaryResult ruleMatches={eligibleSchemes[0].ruleMatches} />
+                  )}
+                </div>
               </div>
             </div>
           </div>

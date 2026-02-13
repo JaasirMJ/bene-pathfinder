@@ -5,7 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Stepper } from "@/components/Stepper";
+import { useLanguage } from "@/i18n/LanguageContext";
 import { ArrowRight, ArrowLeft, Upload, FileText, CheckCircle, X } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface DocSlot {
   label: string;
@@ -23,11 +25,16 @@ const documentSlots: DocSlot[] = [
 
 const DocumentsUpload = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [uploads, setUploads] = useState<Record<string, File | null>>({});
 
   const handleFile = (key: string, files: FileList | null) => {
     if (files && files[0]) {
       setUploads((prev) => ({ ...prev, [key]: files[0] }));
+      toast({
+        title: "✅ " + t("docs.uploadSuccess"),
+        description: files[0].name,
+      });
     }
   };
 
