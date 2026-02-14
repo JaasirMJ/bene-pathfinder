@@ -28,6 +28,16 @@ import OfficerDashboard from "./pages/OfficerDashboard";
 import FAQ from "./pages/FAQ";
 import SavedSchemes from "./pages/SavedSchemes";
 import OfficeFinder from "./pages/OfficeFinder";
+import AdminProfile from "./pages/AdminProfile";
+import AdminSettings from "./pages/AdminSettings";
+import FindOfficers from "./pages/FindOfficers";
+import SchoolLogin from "./pages/SchoolLogin";
+import SchoolDashboard from "./pages/SchoolDashboard";
+import VerifyDocuments from "./pages/VerifyDocuments";
+import Contact from "./pages/Contact";
+import ThankYou from "./pages/ThankYou";
+import TrackApplication from "./pages/TrackApplication";
+import Feedback from "./pages/Feedback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -63,6 +73,16 @@ const App = () => (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/saved-schemes" element={<SavedSchemes />} />
             <Route path="/office-finder" element={<OfficeFinder />} />
+            <Route path="/admin/profile" element={<AdminProfile />} />
+            <Route path="/admin/settings" element={<AdminSettings />} />
+            <Route path="/officers" element={<FindOfficers />} />
+            <Route path="/school-login" element={<SchoolLogin />} />
+            <Route path="/school/dashboard" element={<SchoolDashboard />} />
+            <Route path="/verify-documents" element={<VerifyDocuments />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/track-application" element={<TrackApplication />} />
+            <Route path="/feedback" element={<Feedback />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

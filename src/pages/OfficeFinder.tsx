@@ -120,7 +120,12 @@ const OfficeFinder = () => {
                 </div>
               </div>
 
-              <Button variant="outline" size="sm" className="w-full gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full gap-2"
+                onClick={() => window.open("https://maps.google.com/?q=nearest+government+office", "_blank")}
+              >
                 <Navigation className="h-4 w-4" />
                 Get Directions
               </Button>

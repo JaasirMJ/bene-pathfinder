@@ -39,16 +39,22 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {['Browse Schemes', 'How It Works', 'About Us', 'FAQs', 'Contact'].map((link) => (
-                <li key={link}>
-                  <Link 
-                    to="#" 
-                    className="text-primary-foreground/70 hover:text-accent transition-colors text-sm"
-                  >
-                    {link}
-                  </Link>
-                </li>
-              ))}
+            {[
+              { label: 'Browse Schemes', to: '/schemes' },
+              { label: 'How It Works', to: '/how-it-works' },
+              { label: 'About Us', to: '/about' },
+              { label: 'FAQs', to: '/faq' },
+              { label: 'Contact', to: '/contact' },
+            ].map((link) => (
+              <li key={link.label}>
+                <Link 
+                  to={link.to} 
+                  className="text-primary-foreground/70 hover:text-accent transition-colors text-sm"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
             </ul>
           </div>
 
@@ -56,16 +62,22 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">For Citizens</h4>
             <ul className="space-y-2">
-              {['Check Eligibility', 'Track Application', 'Find Offices', 'Help Center', 'Feedback'].map((link) => (
-                <li key={link}>
-                  <Link 
-                    to="#" 
-                    className="text-primary-foreground/70 hover:text-accent transition-colors text-sm"
-                  >
-                    {link}
-                  </Link>
-                </li>
-              ))}
+            {[
+              { label: 'Check Eligibility', to: '/eligibility-check' },
+              { label: 'Track Application', to: '/track-application' },
+              { label: 'Find Offices', to: '/office-finder' },
+              { label: 'Help Center', to: '/faq' },
+              { label: 'Feedback', to: '/feedback' },
+            ].map((link) => (
+              <li key={link.label}>
+                <Link 
+                  to={link.to} 
+                  className="text-primary-foreground/70 hover:text-accent transition-colors text-sm"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
             </ul>
           </div>
 
@@ -75,16 +87,16 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-sm text-primary-foreground/70">
                 <Mail className="h-4 w-4" />
-                support@benefitsgps.gov.in
+                codeablaze@benefitsgps.gov.in
               </li>
               <li className="flex items-center gap-2 text-sm text-primary-foreground/70">
                 <Phone className="h-4 w-4" />
-                1800-XXX-XXXX (Toll Free)
+                1800-342-334 (Toll Free)
               </li>
               <li className="flex items-start gap-2 text-sm text-primary-foreground/70">
                 <MapPin className="h-4 w-4 mt-0.5" />
-                Ministry of Social Justice,<br />
-                New Delhi, India
+                Ministry of SDG Affairs,<br />
+                Tamil Nadu, India
               </li>
             </ul>
           </div>

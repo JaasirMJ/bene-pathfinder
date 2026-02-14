@@ -43,6 +43,7 @@ const publicLinks = [
   { href: "/schemes", label: "Browse Schemes" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/about", label: "About" },
+  { href: "/school-login", label: "For Schools" },
 ];
 
 const dashboardLinks = {

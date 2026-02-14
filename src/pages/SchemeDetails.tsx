@@ -11,7 +11,7 @@ import { MissingDocsPopup } from "@/components/MissingDocsPopup";
 import { SchemeTypeBadge, SchemeImportanceBadge } from "@/components/SchemeTypeBadge";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
-import { ArrowLeft, ArrowRight, CheckCircle, XCircle, FileText, IndianRupee, Bookmark } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle, XCircle, FileText, IndianRupee, Bookmark, Navigation } from "lucide-react";
 import { mockSchemes } from "@/data/mockData";
 import { cn } from "@/lib/utils";
 
@@ -159,6 +159,14 @@ const SchemeDetails = () => {
               <Link to="/schemes">
                 <Button variant="outline" className="w-full">Browse Other Schemes</Button>
               </Link>
+              <Button
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() => window.open("https://maps.google.com/?q=nearest+government+office", "_blank")}
+              >
+                <Navigation className="h-4 w-4" />
+                Get Directions
+              </Button>
             </div>
           </div>
         </div>
