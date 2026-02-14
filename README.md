@@ -238,8 +238,6 @@ Application steps
 🧱 Tech Stack
 🔹 Frontend
 
-Lovable (AI-powered builder)
-
 HTML / CSS / JavaScript
 
 Tailwind-injected components
